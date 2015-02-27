@@ -1,0 +1,13 @@
+inhalation anthrax,infection located_in lung lymph nodes brought on by breathing in the spores of the bacteria Bacillus anthracis
+cutaneous anthrax,skin lesion that eventually forms an ulcer with a black center,infection located_in skin
+oropharyngeal anthrax,lesions,vomiting of blood,severe diarrhea,loss of appetite,infection located_in mucosa of oropharynx
+foodborne botulism,blurred vision,diplopia,dysarthria,dysphonia,dysphagia and,descending muscle paralysis
+pneumonic plague,fever,chills,cough and,difficulty breathing,infection located_in lung
+variola major,lesions,severe infection,_formation_of lesions
+gastrointestinal tularemia,fever,chills,malaise,muscle aches,vomiting
+pneumonic tularemia,cough,chest,pain,difficulty breathing
+typhoidal tularemia,fever,chills,myalgia,malaise,weight loss,bacteremia and has_symptom fever
+Ebola hemorrhagic fever,fever,headache,joint pain,muscle aches,sore throat,weakness,diarrhea,vomiting,stomach pain,rash,red eyes,hiccups,internal and external bleeding
+Marburg hemorrhagic fever,fever,chills,headache,myalgia,maculopapular rash on the trunk,nausea,vomiting,chest pain,sore throat,abdominal pain,diarrhea,bleeding
+Lassa fever,fever,retrosternal pain,sore throat,back pain,cough,abdominal pain,vomiting,diarrhea,conjunctivitis,facial swelling,proteinuria (protein in the urine),mucosal bleeding,infection
+Bolivian hemorrhagic fever,fever,headache,fatigue,myalgia,arthralgia,bleeding from the oral and nasal mucosa,bleeding from the bronchopulmonary
