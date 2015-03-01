@@ -32,7 +32,7 @@ def GetPatient(disease, prob_has_symptom=0.8, prob_has_rand_symptom=0.01):
 CONTACTS = "contact"
 SYMPTOMS = "symptoms"
 
-def GenPatients(disease, probOfContact, probInfect, probCarrier, numPatients, decay_factor):
+def GenPatients(disease, probOfContact, probInfect, probCarrier, numPatients, decayFactor, probRandomSymptom):
 	Patients = []
 	# Initialize patients list
 	for i in range(numPatients):
@@ -52,7 +52,7 @@ def GenPatients(disease, probOfContact, probInfect, probCarrier, numPatients, de
 	# Create initial patient with disease
 	patient_x = 0
 	symptom_prob = 0.9
-	Patients[patient_x][SYMPTOMS] = GetPatient(disease, symptom_prob)
+	Patients[patient_x][SYMPTOMS] = GetPatient(disease, symptom_prob, probRandomSymptom)
 
 	# Infect neighbors
 	q = Queue.Queue()
@@ -61,24 +61,26 @@ def GenPatients(disease, probOfContact, probInfect, probCarrier, numPatients, de
 	infected = set([patient_x])
 	while not q.empty():
 		curr_patient = q.get()
-		# With probablity probInfect, infect a neighbor
+		# With probablity probInfect, infect this neighbor
 		if random.random() < probInfect:
 			infected.add(curr_patient)
-			Patients[curr_patient][SYMPTOMS] = GetPatient(disease, symptom_prob)
+			Patients[curr_patient][SYMPTOMS] = GetPatient(disease, symptom_prob, probRandomSymptom)
 			for neighbor in Patients[curr_patient][CONTACTS]:
 				if neighbor not in infected: # Already infected, no point infecting again...
 					q.put(neighbor)
-			symptom_prob *= decay_factor # less likely to show symptoms if in initial stages
-		elif random.random() < probCarrier: # With probability probCarrier, could be a carrier; probability infect neighbor is probCarrier*probInfect
+			symptom_prob *= decayFactor # simulate passage of time; later a patient infected, less likely to show all symptoms
+		# With probability probCarrier, could be a carrier for disease (but not actually infeced)
+		# probability infect neighbor is probCarrier*probInfect
+		elif random.random() < probCarrier:
 			for neighbor in Patients[curr_patient][CONTACTS]:
 				if neighbor not in infected:
 					q.put(neighbor)
-			symptom_prob *= decay_factor # less likely to show symptoms if in initial stages
+			symptom_prob *= decayFactor # simulate passage of time; later a patient infected, less likely to show all symptoms
 
 	# Given remaining patients random symptoms
 	for i in range(numPatients):
 		if SYMPTOMS not in Patients[i]:
-			Patients[i][SYMPTOMS] = GetPatient(disease, 0.0, 0.01)
+			Patients[i][SYMPTOMS] = GetPatient(disease, 0.0, probRandomSymptom)
 
 	return Patients
 
@@ -87,5 +89,5 @@ def GenPatients(disease, probOfContact, probInfect, probCarrier, numPatients, de
 
 
 
-if __name__ == "__main__" : print GenPatients('inhalation anthrax', 0.05, 0.5, 0.2, 20, 0.9)
+if __name__ == "__main__" : print GenPatients('inhalation anthrax', 0.05, 0.5, 0.2, 20, 0.9, 0.01)
 
