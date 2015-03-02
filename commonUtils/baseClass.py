@@ -1,118 +1,248 @@
 class Ontology(object):
-	"""Ontology is the overarching class containing information
-	for the bioAgent ontology"""
-	def __init__(self, name):
-		"""Initializes an empty ontology with the identifying name"""
-		super(Ontology, self).__init__()
-		self.name = name
-		self.patients = {}
-		self.pMethods = {}
-		self.agents = {}
-		self.nextPID = 1
-		self.__transmissions = []
-		self.__findings = []
+    """Ontology is the overarching class containing information
+    for the bioAgent ontology"""
+    def __init__(self, name):
+        """Initializes an empty ontology with the identifying name"""
+        super(Ontology, self).__init__()
+        self.name = name
+        self.patients = {} # Dict of {ID: Patient instance}
 
-	def addPatient(self, newPatient):
-		"""Add a new patient of class Patient"""
-		if newPatient.ID not in self.patients.keys():
-			self.patients[self.nextPID] = newPatient
-			self.nextPID += 1
-		else:
-			print "patient with ID {0} already in database".format(newPatient.ID)
+        # Final (private) class variables to be populated by bulk
+        self.__pMethods = [] # List of PMethod instances
+        self.__agents = [] # List of Agent instances 
+        self.__transmissions = [] # List of Transmission instances
+        self.__findings = [] # List of Finding instances
+ 
+    def addPatient(self, newPatient):
+        """Add a new patient of class Patient"""
+        if newPatient.ID not in self.patients.keys():
+            self.patients[newPatient.ID] = newPatient
+        else:
+            print "patient with ID {0} already in database".format(newPatient.ID)
 
-	def addPMethod(self, newMethod):
-		"""Add a new prevention method of class PMethod"""
-		if newMethod.name not in self.pMethods.keys():
-			self.pMethods[nawMethod.name] = newMethod
-		else:
-			print "method with name {0} already in database".format(newMethod.name)
+    def getPatientByID(self, ID):
+        """Get a patient from the ontology using his ID"""
+        patient = self.patient.get(ID, None)
+        if not patient:
+            print "!!WARNING: Could not find patient with ID {0}".format(ID)
+        return patient
+ 
+    def getNextPatientID(self):
+        """Get the next smallest unused integer as ID for patient"""
+        return max([patient.ID for patient in self.patients]) + 1
 
-	def addAgent(self, newAgent):
-		"""Add a new disease agent of class Agent"""
-		if newAgent.name not in self.agents.key():
-			self.agents[newAgent.name] = newAgent
-		else:
-			print "agent with name {0} already in database".format(newAgent.name)
+    def getTransmissionByName(self, name):
+        for t in self.__transmissions:
+            if t.definition == name:
+                return t
+        
+        print "!!WARNING: Could not find transmission method with definition {0}".format(name)
+        return None
+ 
+    def getFindingByName(self, name):
+        for f in self.__findings:
+            if f.definition == name:
+                return f
 
-	def getNextPatientID(self):
-		"""Get the next smallest integer as ID for patient"""
-		return self.nextPID
+        print "!!WARNING: Could not find finding with definition {0}".format(name)
+        return None
 
-	def loadTransmissions(self, f):
-		"""Loads a list of transmissions from file"""
-		pass
+    def getAgentByName(self, name):
+        for a in self.__agents:
+            if a.name == name:
+                return a
 
-	def loadFindings(self, f):
-		"""Loads a list of findings form file"""
-		pass
+        print "!!WARNING: Could not find agent with name {0}".format(name)
+        return None
 
-	def loadPMethods(self, f):
-		"""Loads a list of preventionMethods from file.
-		Need to load Transmissions before loading PMethods"""
+    def getPMethodByName(self, name):
+        for p in self.__pMethods:
+            if p.name == name:
+                return p
 
-	def loadAgents(self, f):
-		"""Loads a list of disease agents from file.
-		Need to load Transmissions before loading Agents"""
+        print "!!WARNING: Could not find pMethod with name {0}".format(name)
+        return None
 
-	def __str__(self):
-		return 'Ontology [{0}]: {1} patients; {2} agents; {3} prevention methods'.format(self.name, len(self.patients), len(self.agents), len(self.pMethods))
+    def initialize()
+    def _loadTransmissions(self, filePath):
+        """Loads a list of transmissions from file, file expected to
+        be a single column txt file, where the single column contains
+        name (aka definition) of the transmission method"""
+        with open(filePath) as f:
+            f.next() # skip header
+            for line in f:
+                transmission = TransmissionMethod(line.rstrip())
+                self.__transmissions.append(transmission)
+
+        print "INFO: Parsed %d transmission methods" %len(self.__transmissions)
+
+    def _loadFindings(self, filePath):
+        """Loads a list of findings form file, file expected to be a
+        single column txt file, where the single column contains name
+        (aka definition) of the finding"""
+        with open(filePath) as f:
+            f.next() # skip header
+            for line in f:
+                finding = Finding(line.rstrip())
+                self.__findings.append(finding)
+
+        print "INFO: Parsed %d findings" %len(self.__findings)
+
+    def _loadPMethods(self, filePath):
+        """Loads a list of preventionMethods from file.
+        Need to load Transmissions before loading PMethods. 
+        Expect a 5 column file:
+        1. Prevention Method (may be blank due to merged line)
+        2. Transmission Method
+        3. Effectiveness [int, 0-100]
+        4. Economic Cost [int, 0-100]
+        5. Social Cost [int, 0-100]"""
+
+        with open(filePath) as f:
+            f.next() # skip header
+            for line in f:
+                currentPMethod = None
+                data = line.rstrip().split('\t')
+                assert (len(data) == 5, 'expected 5 columns, got %s' %line):
+
+
+                (tName, eff, eCost, sCost) = (
+                    data[1], int(data[2]), int(data[3]), int(data[4]))
+
+                transmission = self.getTransmissionByName(tName)
+                assert transmission is not None, "Didn't find a transmission of name %s" %(tName)
+
+                if data[0]:
+                    currentPMethod = data[0]
+                    pMethod = pMethod(name, eCost, sCost)
+                    self.__pMethods.append(pMethod)
+                else:
+                    pMethod = self.getPMethodByName(currentPMethod)
+
+                assert pMethod is not None, "Didn't find a pMethod to work on :("
+
+                pMethod.addEffectivenessForTransmission(transmission, effectiveness)
+
+    def _loadAgents(self, filePath):
+        """Loads a list of disease agents from file.
+        Need to load Transmissions before loading Agents.
+        Agents is a 5 column txt file containing:
+        1. name
+        2. triggering findings: comma separated list, in the form [finding]=[strength]
+        3. transmissions: comma separated list
+        4. incubation period: [int]
+        5. mortality: [float]"""
+        with open(filePath) as f:
+            f.next() #skip header
+            for line in f:
+                data = line.rstrip().split(',')
+                assert len(data) == 5, "Malformed data entry; expected 5 columns, got %s" %line
+                
+                [name, tFindingData, transmissions, incub, mortality] = data 
+                
+                # Triggering Findings
+                tFindingStrengths = [finding.split('=') for finding in tFindingData]
+                tFindings = [TriggeringFinding(self.getFindingByName(finding), float(strength)) 
+                             for [finding, strength] in tFindingStrengths]
+
+                # Transimssionmethod
+                tMethods = [self.getTransmissionByName(transmission) for transmission in transmissions]
+                
+                incub = int(incub)
+                mortality = float(mortality)
+
+                agent = Agent(name, incub, mortality, tFindingDict, tMethods)
+                self.__agents.append(agent)
+
+        print "INFO: parsed %d agents" %(len(self.__agents))
+
+
+    def __str__(self):
+        return 'Ontology [{0}]: {1} patients; {2} agents; {3} prevention methods'.format(self.name, len(self.patients), len(self.agents), len(self.pMethods))
 
 class Patient(object):
-	"""Patient encodes information for a single patient"""
-	def __init__(self, ID, name, dateSeen):
-		"""Basic constructor to initalize all fields for the Patient class. ID, name and dateSeen
-		should be given; all other fields initialized to empty set. Values can be changed directly
-		by accessing class variables"""
-		super(Patient, self).__init__()
-		self.ID = ID
-		self.name = name
-		self.dateSeen = dateSeen
-		self.findings = set() # A set
-		self.pDiagnosis = set() # A set of probable diagnoses
-		self.cDiagnosis = set() # A set of confirmed diagnoses
-		self.pMethods = set() # A set of received prevention methods
+    """Patient encodes information for a single patient"""
+    def __init__(self, ontology, ID, name, dateSeen):
+        """Basic constructor to initalize all fields for the Patient class. ID, name and dateSeen
+        should be given; all other fields initialized to empty set. Values can be changed directly
+        by accessing class variables"""
+        super(Patient, self).__init__()
+        self.ID = ID
+        self.name = name
+        self.ontology = ontology
+        self.dateSeen = dateSeen
+        self.findings = set() # A set
+        self.pDiagnosis = set() # A set of probable diagnoses
+        self.cDiagnosis = set() # A set of confirmed diagnoses
+        self.pMethods = set() # A set of received prevention methods
+        self.contacts = set() # Contacted
 
-	def __str__(self):
-		return '{0} ({1}): seen on {2} with findings {3}, received {4} due to confirmed diagnosis: {5} and probable diagnosis: {6}'.format(
-			self.name, self.ID, self.dateSeen, self.pMethods, self.cDiagnosis, self.pDiagnosis)
+    # Setter methods
+    def addFinding(self, findingName):
+        finding = self.ontology.getFindingByName(findingName)
+        if finding:
+            self.findings.add(finding)
+
+    def addPDiagnosis(self, agentName):
+        agent = self.ontology.getAgentByName(agentName)
+        if agent:
+            self.pDiagnosis.add(agent)
+
+    def addCDiagnosis(self, agentName):
+        agent = self.ontology.getAgentByName(agentName)
+        if agent:
+            self.cDiagnosis.add(agent)
+
+    def addContacts(self, contacts):
+        self.contacts = contacts
+
+    def __str__(self):
+        return '{0} ({1}): seen on {2} with findings {3}, received {4} due to confirmed diagnosis: {5} and probable diagnosis: {6}'.format(
+            self.name, self.ID, self.dateSeen, self.pMethods, self.cDiagnosis, self.pDiagnosis)
 
 class Agent(object):
-	"""Agent encodes information for a disease agent"""
-	def __init__(self, name, incubationPeriod, mortality, findings, transmissions):
-		super(Agent, self).__init__()
-		self.name = name
-		self.incubationPeriod = incubationPeriod
-		self.mortality = mortality
-		self.transmissions = transmissions
+    """Agent encodes information for a disease agent"""
+    def __init__(self, name, incubationPeriod, mortality, findings, transmissions):
+        super(Agent, self).__init__()
+        self.name = name
+        self.incubationPeriod = incubationPeriod
+        self.mortality = mortality 
+        self.transmissions = transmissions
+        self.tFindings = findings # Dict of {Finding: strength}
 
 class PMethod(object):
-	"""docstring for PMethod"""
-	def __init__(self, name, effectiveness):
-		super(PMethod, self).__init__()
-		self.name = name
-		self.effectiveness = effectiveness # dict of the form {TransmissionMethod: int[0, 100]}
-		self.sCost = sCost # social cost (int in [0, 100])
-		self.eCost = eCost # economic cost (int in [0, 100])
+    """docstring for PMethod"""
+    def __init__(self, name, sCost, eCost):
+        """Initiate with name(definition), social cost and economic cost,
+        add in effectiveness by addEffectivenessForTransmission method"""
+        super(PMethod, self).__init__()
+        self.name = name
+        self.effectiveness = dict() # dict of the form {TransmissionMethod: int[0, 100]}
+        self.sCost = sCost # social cost (int in [0, 100])
+        self.eCost = eCost # economic cost (int in [0, 100])
 
-class DefitionObject(object):
-		"""docstring for DefitionObject"""
-		def __init__(self, definition):
-			super(DefitionObject, self).__init__()
-			self.definition = definition
-				
-class TransmissionMethod(DefitionObject):
-	"""TransmissionMethod encodes information for a disease transmission method."""
-	def __init__(self, definition):
-		super(TransmissionMethod, self).__init__(definition)
+    def addEffectivenessForTransmission(self, transmission, effectiveness):
+        self.effectiveness[transmission] = effectiveness
 
-class Finding(DefitionObject):
-"""Finding encodes information for a clinical finding."""
-	def __init__(self, definition):
-		super(Finding, self).__init__(definition)
+class DefinitionObject(object):
+        """docstring for DefitionObject"""
+        def __init__(self, definition):
+            super(DefitionObject, self).__init__()
+            self.definition = definition
+                
+class TransmissionMethod(DefinitionObject):
+    """TransmissionMethod encodes information for a disease transmission method."""
+    def __init__(self, definition):
+        super(TransmissionMethod, self).__init__(definition)
 
-class TriggeringFinding(Object):
-"""TriggeringFinding encodes information for a clinical finding + its triggering strength."""
-	def __init__(self, finding, triggeringStrength):
-		super(TriggeringFinding, self).__init__()
-		self.finding = finding
-		self.triggeringStrength = triggeringStrength
+class Finding(DefinitionObject):
+    """Finding encodes information for a clinical finding."""
+    def __init__(self, definition):
+        super(Finding, self).__init__(definition)
+
+class TriggeringFinding(object):
+    """TriggeringFinding encodes information for a clinical finding + its triggering strength."""
+    def __init__(self, finding, triggeringStrength):
+        super(TriggeringFinding, self).__init__()
+        self.finding = finding
+        self.triggeringStrength = triggeringStrength
