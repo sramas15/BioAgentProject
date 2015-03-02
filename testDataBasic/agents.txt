@@ -1,0 +1,2 @@
+Disease	Triggering Findings	Transmission Method (Comma separated list)	Incubation Period (days)	Mortality Rate
+Inhalation anthrax	infection located_in lung lymph nodes=10,sore throat=2,mild fever=1,muscle aches=1	Airborne Transmission	7	0.45

@@ -1,0 +1,15 @@
+Animal to Human Transmission
+Blood Borne Transmission
+Lactation Transmission
+Fecal Oral Transmission
+Airborne Transmission
+Fomite Transmission
+Food Borne Transmission
+Human to Human Transmission
+Nosocomial Transmission
+Transdermal Transmission
+Transfusion Transmission
+Sexual Transmission
+Transplacental Transmission
+Vector-borne Transmission
+Water-borne Transmission

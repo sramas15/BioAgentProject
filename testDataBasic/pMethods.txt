@@ -1,0 +1,155 @@
+Prevention Method	Effective against (transmission method, 1 per line)	Effectiveness (Score from 0 to 100)	Economic Cost (0 -100)	Social Cost (0 -100)
+Contact Tracing	Animal to Human Transmission	1	1	1
+	Blood Borne Transmission	2	2	2
+	Fecal Oral Transmission	3	3	3
+	Airborne Transmission	4	4	4
+	Fomite Transmission	5	5	5
+	Food Borne Transmission	6	6	6
+	Human to Human Transmission	7	7	7
+	Nosocomial Transmission	8	8	8
+	Transdermal Transmission	9	9	9
+	Transfusion Transmission	10	10	10
+	Sexual Transmission	11	11	11
+	Transplacental Transmission	12	12	12
+	Vector-borne Transmission	13	13	13
+	Water-borne Transmission	14	14	14
+Control of Vectors	Animal to Human Transmission	15	15	15
+	Blood Borne Transmission	16	16	16
+	Fecal Oral Transmission	17	17	17
+	Airborne Transmission	18	18	18
+	Fomite Transmission	19	19	19
+	Food Borne Transmission	20	20	20
+	Human to Human Transmission	21	21	21
+	Nosocomial Transmission	22	22	22
+	Transdermal Transmission	23	23	23
+	Transfusion Transmission	24	24	24
+	Sexual Transmission	25	25	25
+	Transplacental Transmission	26	26	26
+	Vector-borne Transmission	27	27	27
+	Water-borne Transmission	28	28	28
+Culture of Sample	Animal to Human Transmission	29	29	29
+	Blood Borne Transmission	30	30	30
+	Fecal Oral Transmission	31	31	31
+	Airborne Transmission	32	32	32
+	Fomite Transmission	33	33	33
+	Food Borne Transmission	34	34	34
+	Human to Human Transmission	35	35	35
+	Nosocomial Transmission	36	36	36
+	Transdermal Transmission	37	37	37
+	Transfusion Transmission	38	38	38
+	Sexual Transmission	39	39	39
+	Transplacental Transmission	40	40	40
+	Vector-borne Transmission	41	41	41
+	Water-borne Transmission	42	42	42
+General Gown Technique (Blood and Body Fluid prevention)	Animal to Human Transmission	43	43	43
+	Blood Borne Transmission	44	44	44
+	Fecal Oral Transmission	45	45	45
+	Airborne Transmission	46	46	46
+	Fomite Transmission	47	47	47
+	Food Borne Transmission	48	48	48
+	Human to Human Transmission	49	49	49
+	Nosocomial Transmission	50	50	50
+	Transdermal Transmission	51	51	51
+	Transfusion Transmission	52	52	52
+	Sexual Transmission	53	53	53
+	Transplacental Transmission	54	54	54
+	Vector-borne Transmission	55	55	55
+	Water-borne Transmission	56	56	56
+Respiratory Isolation	Animal to Human Transmission	57	57	57
+	Blood Borne Transmission	58	58	58
+	Fecal Oral Transmission	59	59	59
+	Airborne Transmission	60	60	60
+	Fomite Transmission	61	61	61
+	Food Borne Transmission	62	62	62
+	Human to Human Transmission	63	63	63
+	Nosocomial Transmission	64	64	64
+	Transdermal Transmission	65	65	65
+	Transfusion Transmission	66	66	66
+	Sexual Transmission	67	67	67
+	Transplacental Transmission	68	68	68
+	Vector-borne Transmission	69	69	69
+	Water-borne Transmission	70	70	70
+Quarantine of Patient	Animal to Human Transmission	71	71	71
+	Blood Borne Transmission	72	72	72
+	Fecal Oral Transmission	73	73	73
+	Airborne Transmission	74	74	74
+	Fomite Transmission	75	75	75
+	Food Borne Transmission	76	76	76
+	Human to Human Transmission	77	77	77
+	Nosocomial Transmission	78	78	78
+	Transdermal Transmission	79	79	79
+	Transfusion Transmission	80	80	80
+	Sexual Transmission	81	81	81
+	Transplacental Transmission	82	82	82
+	Vector-borne Transmission	83	83	83
+	Water-borne Transmission	84	84	84
+Quaratine of Contact	Animal to Human Transmission	85	85	85
+	Blood Borne Transmission	86	86	86
+	Fecal Oral Transmission	87	87	87
+	Airborne Transmission	88	88	88
+	Fomite Transmission	89	89	89
+	Food Borne Transmission	90	90	90
+	Human to Human Transmission	91	91	91
+	Nosocomial Transmission	92	92	92
+	Transdermal Transmission	93	93	93
+	Transfusion Transmission	94	94	94
+	Sexual Transmission	95	95	95
+	Transplacental Transmission	96	96	96
+	Vector-borne Transmission	97	97	97
+	Water-borne Transmission	98	98	98
+Aseptic Method	Animal to Human Transmission	99	99	99
+	Blood Borne Transmission	100	100	100
+	Fecal Oral Transmission	1	1	1
+	Airborne Transmission	2	2	2
+	Fomite Transmission	3	3	3
+	Food Borne Transmission	4	4	4
+	Human to Human Transmission	5	5	5
+	Nosocomial Transmission	6	6	6
+	Transdermal Transmission	7	7	7
+	Transfusion Transmission	8	8	8
+	Sexual Transmission	9	9	9
+	Transplacental Transmission	10	10	10
+	Vector-borne Transmission	11	11	11
+	Water-borne Transmission	12	12	12
+Monitoring Signs and Symptoms	Animal to Human Transmission	13	13	13
+	Blood Borne Transmission	14	14	14
+	Fecal Oral Transmission	15	15	15
+	Airborne Transmission	16	16	16
+	Fomite Transmission	17	17	17
+	Food Borne Transmission	18	18	18
+	Human to Human Transmission	19	19	19
+	Nosocomial Transmission	20	20	20
+	Transdermal Transmission	21	21	21
+	Transfusion Transmission	22	22	22
+	Sexual Transmission	23	23	23
+	Transplacental Transmission	24	24	24
+	Vector-borne Transmission	25	25	25
+	Water-borne Transmission	26	26	26
+Handwashing Precautions	Animal to Human Transmission	27	27	27
+	Blood Borne Transmission	28	28	28
+	Fecal Oral Transmission	29	29	29
+	Airborne Transmission	30	30	30
+	Fomite Transmission	31	31	31
+	Food Borne Transmission	32	32	32
+	Human to Human Transmission	33	33	33
+	Nosocomial Transmission	34	34	34
+	Transdermal Transmission	35	35	35
+	Transfusion Transmission	36	36	36
+	Sexual Transmission	37	37	37
+	Transplacental Transmission	38	38	38
+	Vector-borne Transmission	39	39	39
+	Water-borne Transmission	40	40	40
+Community Health Education	Animal to Human Transmission	41	41	41
+	Blood Borne Transmission	42	42	42
+	Fecal Oral Transmission	43	43	43
+	Airborne Transmission	44	44	44
+	Fomite Transmission	45	45	45
+	Food Borne Transmission	46	46	46
+	Human to Human Transmission	47	47	47
+	Nosocomial Transmission	48	48	48
+	Transdermal Transmission	49	49	49
+	Transfusion Transmission	50	50	50
+	Sexual Transmission	51	51	51
+	Transplacental Transmission	52	52	52
+	Vector-borne Transmission	53	53	53
+	Water-borne Transmission	54	54	54

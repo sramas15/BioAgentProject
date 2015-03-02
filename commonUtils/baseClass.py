@@ -14,7 +14,11 @@ class Ontology(object):
         self.__findings = [] # List of Finding instances
  
     def addPatient(self, newPatient):
-        """Add a new patient of class Patient"""
+        """Add a new patient of class Patient.
+        Should call initialize to load constant classes
+        before adding a patient"""
+        assert len(self.__pMethods), "Trying to add patient to an uninitialized ontology!"
+
         if newPatient.ID not in self.patients.keys():
             self.patients[newPatient.ID] = newPatient
         else:
@@ -63,13 +67,21 @@ class Ontology(object):
         print "!!WARNING: Could not find pMethod with name {0}".format(name)
         return None
 
-    def initialize()
+    def initialize(self, transmissionFile, findingFile, pMethodFile, agentFile):
+        """Called to load all final classes in the ontology. Should be called
+        before adding any patient!"""
+
+        self._loadTransmissions(transmissionFile)
+        self._loadFindings(findingFile)
+        self._loadPMethods(pMethodFile)
+        self._loadAgents(agentFile)
+
     def _loadTransmissions(self, filePath):
         """Loads a list of transmissions from file, file expected to
         be a single column txt file, where the single column contains
         name (aka definition) of the transmission method"""
         with open(filePath) as f:
-            f.next() # skip header
+            # f.next() # skip header
             for line in f:
                 transmission = TransmissionMethod(line.rstrip())
                 self.__transmissions.append(transmission)
@@ -81,7 +93,7 @@ class Ontology(object):
         single column txt file, where the single column contains name
         (aka definition) of the finding"""
         with open(filePath) as f:
-            f.next() # skip header
+            # f.next() # skip header
             for line in f:
                 finding = Finding(line.rstrip())
                 self.__findings.append(finding)
@@ -100,10 +112,10 @@ class Ontology(object):
 
         with open(filePath) as f:
             f.next() # skip header
+            currentPMethod = None
             for line in f:
-                currentPMethod = None
                 data = line.rstrip().split('\t')
-                assert (len(data) == 5, 'expected 5 columns, got %s' %line):
+                assert len(data) == 5, 'expected 5 columns, got %s' %line
 
 
                 (tName, eff, eCost, sCost) = (
@@ -114,14 +126,16 @@ class Ontology(object):
 
                 if data[0]:
                     currentPMethod = data[0]
-                    pMethod = pMethod(name, eCost, sCost)
+                    pMethod = PMethod(currentPMethod, eCost, sCost)
                     self.__pMethods.append(pMethod)
                 else:
                     pMethod = self.getPMethodByName(currentPMethod)
 
-                assert pMethod is not None, "Didn't find a pMethod to work on :("
+                assert pMethod is not None, "Didn't find a pMethod to work on for the query %s :(" %currentPMethod
 
-                pMethod.addEffectivenessForTransmission(transmission, effectiveness)
+                pMethod.addEffectivenessForTransmission(transmission, eff)
+
+        print "INFO: Parsed %d Prevention Methods" %len(self.__pMethods)
 
     def _loadAgents(self, filePath):
         """Loads a list of disease agents from file.
@@ -135,30 +149,40 @@ class Ontology(object):
         with open(filePath) as f:
             f.next() #skip header
             for line in f:
-                data = line.rstrip().split(',')
-                assert len(data) == 5, "Malformed data entry; expected 5 columns, got %s" %line
+                data = line.rstrip().split('\t')
+                assert len(data) == 5, "Malformed data entry; expected 5 columns, got %d, %s" %(len(data), data)
                 
                 [name, tFindingData, transmissions, incub, mortality] = data 
                 
                 # Triggering Findings
-                tFindingStrengths = [finding.split('=') for finding in tFindingData]
+                tFindingStrengths = [finding.split('=') for finding in tFindingData.split(',')]
+                
+
                 tFindings = [TriggeringFinding(self.getFindingByName(finding), float(strength)) 
                              for [finding, strength] in tFindingStrengths]
 
-                # Transimssionmethod
-                tMethods = [self.getTransmissionByName(transmission) for transmission in transmissions]
+                print "INFO: for agent %s, parsed triggering findings:" %(name)
+                for tFinding in tFindings:
+                    print '\t\t', tFinding
                 
+                # Transimssionmethod
+                tMethods = [self.getTransmissionByName(transmission) for transmission in transmissions.split(',')]
+                
+                print "\t and transmission methods:"
+                for t in tMethods:
+                    print '\t\t', t
+
                 incub = int(incub)
                 mortality = float(mortality)
 
-                agent = Agent(name, incub, mortality, tFindingDict, tMethods)
+                agent = Agent(name, incub, mortality, tFindings, tMethods)
                 self.__agents.append(agent)
 
         print "INFO: parsed %d agents" %(len(self.__agents))
 
 
     def __str__(self):
-        return 'Ontology [{0}]: {1} patients; {2} agents; {3} prevention methods'.format(self.name, len(self.patients), len(self.agents), len(self.pMethods))
+        return 'Ontology [{0}]: {1} patients; {2} agents; {3} prevention methods'.format(self.name, len(self.patients), len(self.__agents), len(self.__pMethods))
 
 class Patient(object):
     """Patient encodes information for a single patient"""
@@ -225,24 +249,36 @@ class PMethod(object):
         self.effectiveness[transmission] = effectiveness
 
 class DefinitionObject(object):
-        """docstring for DefitionObject"""
+        """docstring for DefinitionObject"""
         def __init__(self, definition):
-            super(DefitionObject, self).__init__()
+            super(DefinitionObject, self).__init__()
             self.definition = definition
-                
+        
+        def __str__(self):
+            return self.definition
+
 class TransmissionMethod(DefinitionObject):
     """TransmissionMethod encodes information for a disease transmission method."""
     def __init__(self, definition):
         super(TransmissionMethod, self).__init__(definition)
+
+    def __str__(self):
+        return super(TransmissionMethod, self).__str__()
 
 class Finding(DefinitionObject):
     """Finding encodes information for a clinical finding."""
     def __init__(self, definition):
         super(Finding, self).__init__(definition)
 
+    def __str__(self):
+        return super(Finding, self).__str__()
+    
 class TriggeringFinding(object):
     """TriggeringFinding encodes information for a clinical finding + its triggering strength."""
     def __init__(self, finding, triggeringStrength):
         super(TriggeringFinding, self).__init__()
         self.finding = finding
         self.triggeringStrength = triggeringStrength
+
+    def __str__(self):
+        return('%s: %.3f' %(self.finding.definition, self.triggeringStrength))
