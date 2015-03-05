@@ -1,3 +1,5 @@
+import operator
+
 class Ontology(object):
     """Ontology is the overarching class containing information
     for the bioAgent ontology"""
@@ -26,7 +28,7 @@ class Ontology(object):
 
     def getPatientByID(self, ID):
         """Get a patient from the ontology using his ID"""
-        patient = self.patient.get(ID, None)
+        patient = self.patients.get(ID, None)
         if not patient:
             print "!!WARNING: Could not find patient with ID {0}".format(ID)
         return patient
@@ -66,6 +68,9 @@ class Ontology(object):
 
         print "!!WARNING: Could not find pMethod with name {0}".format(name)
         return None
+
+    def getAgentIterable(self):
+        return self.__agents
 
     def initialize(self, transmissionFile, findingFile, pMethodFile, agentFile):
         """Called to load all final classes in the ontology. Should be called
@@ -220,6 +225,59 @@ class Patient(object):
     def addContacts(self, contacts):
         self.contacts = contacts
 
+    def __determineDiseaseScores(self):
+        agents = self.ontology.getAgentIterable()
+        scores = {} # Dictionary of agent to score
+        max_score = 0.0
+        for agent in agents:
+            scores[agent] = agent.matchFindings(self.findings)
+            max_score += scores[agent]
+        return [Diagnosis(agent, (scores[agent]/max_score)) for agent in agents]
+
+    def __getDiseaseScoresForContacts(self):
+        scoreByDisease = {}
+        for contactId in contacts:
+            contact = self.ontology.getPatientByID(contactId)
+            if contact is None:
+                continue
+            if len(contact.cDiagnosis) > 0:
+                for diagnosis in contact.cDiagnosis:
+                    if diagnosis not in scoreByDisease:
+                        scoreByDisease[diagnosis.agent] = 0.0
+                    scoreByDisease[diagnosis.agent] += 1.0
+            else:
+                for diagnosis in contact.pDiagnosis:
+                    if diagnosis not in scoreByDisease:
+                        scoreByDisease[diagnosis.agent] = 0.0
+                    scoreByDisease[diagnosis.agent] += diagnosis.score
+        max_score = max(scoreByDisease.iteritems(), key=operator.itemgetter(1))[1]
+        for disease in scoreByDisease:
+            scoreByDisease[disease] /= max_score
+            scoreByDisease[disease] /= 2
+            # Scores between 1.0 to 1.5
+            scoreByDisease[disease] += 1
+        return scoreByDisease
+
+    def __scaleDiseaseScoresByContacts(scores, contactScores):
+        sum_score = 0.0
+        for diagnosis in scores:
+            if diagnosis.agent in contactScores:
+                diagnosis.score *= contactScores[diagnosis.agent]
+            sum_score += diagnosis.score
+        for diagnosis in scores:
+            diagnosis.score /= sum_score
+        return scores
+
+    def determineDiagnosis(self):
+        assert (len(self.findings)) > 0, "A diagnosis cannot be done without findings"
+        scores = self.__determineDiseaseScores()
+        contactScoresByDisease = self.__getDiseaseScoresForContacts()
+        scores = self.__scaleDiseaseScoresByContacts(scores, contactScoresByDisease)
+        self.pFindings = set(scores)
+        return self.pFindings
+
+
+
     def __str__(self):
         return '{0} ({1}): seen on {2} with findings {3}, received {4} due to confirmed diagnosis: {5} and probable diagnosis: {6}'.format(
             self.name, self.ID, self.dateSeen, self.pMethods, self.cDiagnosis, self.pDiagnosis)
@@ -233,6 +291,18 @@ class Agent(object):
         self.mortality = mortality 
         self.transmissions = transmissions
         self.tFindings = findings # Dict of {Finding: strength}
+
+    def matchFindings(self, pFindings):
+        """Given a set of findings for a patient, find the normalized score [0, 1]
+        indicating how likely it is the patient is infected with this agent. """
+        score = 0.0
+        max_score = 0.0
+        for tFinding in self.tFindings:
+            max_score += tFinding.triggeringStrength
+            if tFinding.finding in pFindings:
+                score += tFinding.triggeringStrength
+        return score/max_score
+
 
 class PMethod(object):
     """docstring for PMethod"""
@@ -282,3 +352,13 @@ class TriggeringFinding(object):
 
     def __str__(self):
         return('%s: %.3f' %(self.finding.definition, self.triggeringStrength))
+
+class Diagnosis(object):
+    """Encodes a diagnosis (the agent) and the strength of the diagnosis"""
+    def __init__(self, agent, score):
+        super(Diagnosis, self).__init__()
+        self.agent = agent
+        self.score = score
+
+    def __str__(self):
+        return('%s: %.3f' %(self.agent.name, self.score))
