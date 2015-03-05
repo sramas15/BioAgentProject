@@ -258,7 +258,7 @@ class Patient(object):
             scoreByDisease[disease] += 1
         return scoreByDisease
 
-    def __scaleDiseaseScoresByContacts(scores, contactScores):
+    def __scaleDiseaseScoresByContacts(self, scores, contactScores):
         sum_score = 0.0
         for diagnosis in scores:
             if diagnosis.agent in contactScores:
@@ -290,7 +290,7 @@ class Agent(object):
         self.incubationPeriod = incubationPeriod
         self.mortality = mortality 
         self.transmissions = transmissions
-        self.tFindings = findings # Dict of {Finding: strength}
+        self.tFindings = findings # List of TriggeringFindings
 
     def matchFindings(self, pFindings):
         """Given a set of findings for a patient, find the normalized score [0, 1]
