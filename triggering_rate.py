@@ -1,3 +1,5 @@
+DEFINITIVE_FACTOR = 5
+
 symptom_freq = {}
 with open("disease_symptoms.txt", "r") as f:
 	for line in f:

@@ -7,7 +7,7 @@ pneumonic tularemia,cough,chest pain,difficulty breathing
 typhoidal tularemia,fever,chills,myalgia,malaise,weight loss,bacteremia,fever
 Ebola hemorrhagic fever,fever,headache,joint pain,muscle aches,sore throat,weakness,diarrhea,vomiting,stomach pain,rash,red eyes,hiccups,internal and external bleeding
 Marburg hemorrhagic fever,fever,chills,headache,myalgia,maculopapular rash on the trunk,nausea,vomiting,chest pain,sore throat,abdominal pain,diarrhea,bleeding
-Lassa fever,fever,retrosternal pain,sore throat,back pain,cough,abdominal pain,vomiting,diarrhea,conjunctivitis,facial swelling,proteinuria (protein in the urine),mucosal bleeding,infection
+Lassa fever,fever,retrosternal pain,sore throat,back pain,cough,abdominal pain,vomiting,diarrhea,conjunctivitis,facial swelling,proteinuria (protein in the urine),mucosal bleeding
 cutaneous anthrax,skin lesion that eventually forms an ulcer with a black center,infection located_in skin
 oropharyngeal anthrax,lesions,vomiting of blood,severe diarrhea,loss of appetite,infection located_in mucosa of oropharynx
 Bolivian hemorrhagic fever,fever,headache,fatigue,myalgia,arthralgia,mucosal bleeding,bleeding from the bronchopulmonary
