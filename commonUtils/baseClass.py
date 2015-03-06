@@ -72,6 +72,12 @@ class Ontology(object):
     def getAgentIterable(self):
         return self.__agents
 
+    def getTransmissionMethodIterable(self):
+        return self.__transmissions
+
+    def getPreventionMethodIterable(self):
+        return self.__pMethods
+
     def initialize(self, transmissionFile, findingFile, pMethodFile, agentFile):
         """Called to load all final classes in the ontology. Should be called
         before adding any patient!"""
@@ -276,8 +282,29 @@ class Patient(object):
         scores = self.__determineDiseaseScores()
         contactScoresByDisease = self.__getDiseaseScoresForContacts()
         scores = self.__scaleDiseaseScoresByContacts(scores, contactScoresByDisease)
-        self.pFindings = set(scores)
-        return self.pFindings
+        self.pDiagnosis = set(scores)
+        return self.pDiagnosis
+
+    def determinePreventionMethods(self, threshold, social_weight=1.0/3, econ_weight=2.0/3):
+        assert (len(self.pDiagnosis) > 0 or len(self.cDiagnosis) > 0), "Cannot determine a prevention method without a diagnosis"
+        diagnoses = []
+        if len(self.cDiagnosis) > 0:
+            diagnoses = self.cDiagnosis
+        else:
+            diagnoses = self.pDiagnosis
+        tMethods = self.ontology.getTransmissionMethodIterable()
+        pMethods = self.ontology.getPreventionMethodIterable()
+        for pMethod in pMethods:
+            numerator = 0.0
+            for diagnosis in diagnoses:
+                for tMethod in tMethods:
+                    numerator += diagnosis.score * diagnosis.agent.getTransmissionWeight(tMethod) \
+                        * pMethod.getEffectiveNessForTMethod(tMethod) * diagnosis.agent.mortality
+            denominator = social_weight * pMethod.sCost + econ_weight * pMethod.eCost
+            score = numerator/denominator
+            if score > threshold:
+                self.pMethods.add(pMethod)
+
 
 
 
@@ -307,6 +334,14 @@ class Agent(object):
                 score += tFinding.triggeringStrength
         return score/max_score
 
+    def getTransmissionWeight(self, tMethod):
+        """Get the weight of a transmission method for a given agent. To simplify, this is just 1/number of
+        transmission methods (given that tMethod is one of the transmission methods for the disease)"""
+        assert len(self.transmissions) > 0 % "Agent %s must have at least one transmission method" % self.name
+        if tMethod in self.transmissions:
+            return 1.0/len(self.transmissions)
+        return 0
+
 
 class PMethod(object):
     """docstring for PMethod"""
@@ -321,6 +356,10 @@ class PMethod(object):
 
     def addEffectivenessForTransmission(self, transmission, effectiveness):
         self.effectiveness[transmission] = effectiveness
+
+    def getEffectiveNessForTMethod(self, tMethod):
+        assert tMethod in self.effectiveness, "No effectiveness for tMethod %s" % tMethod.definition
+        return self.effectiveness[tMethod]
 
 class DefinitionObject(object):
         """docstring for DefinitionObject"""
