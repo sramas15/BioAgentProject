@@ -1,13 +1,14 @@
-inhalation anthrax,infection located_in lung lymph nodes,sore throat,mild fever,muscle aches,cough,chest discomfort,shortness of breath,tiredness
-foodborne botulism,blurred vision,diplopia,dysarthria,dysphonia,dysphagia,descending muscle paralysis
-pneumonic plague,fever,chills,cough,difficulty breathing,infection located_in lung
-variola major,lesions,severe infection
-gastrointestinal tularemia,fever,chills,malaise,muscle aches,vomiting
-pneumonic tularemia,cough,chest pain,difficulty breathing
-typhoidal tularemia,fever,chills,myalgia,malaise,weight loss,bacteremia,fever
-Ebola hemorrhagic fever,fever,headache,joint pain,muscle aches,sore throat,weakness,diarrhea,vomiting,stomach pain,rash,red eyes,hiccups,internal and external bleeding
-Marburg hemorrhagic fever,fever,chills,headache,myalgia,maculopapular rash on the trunk,nausea,vomiting,chest pain,sore throat,abdominal pain,diarrhea,bleeding
-Lassa fever,fever,retrosternal pain,sore throat,back pain,cough,abdominal pain,vomiting,diarrhea,conjunctivitis,facial swelling,proteinuria (protein in the urine),mucosal bleeding
-cutaneous anthrax,skin lesion that eventually forms an ulcer with a black center,infection located_in skin
-oropharyngeal anthrax,lesions,vomiting of blood,severe diarrhea,loss of appetite,infection located_in mucosa of oropharynx
-Bolivian hemorrhagic fever,fever,headache,fatigue,myalgia,arthralgia,mucosal bleeding,bleeding from the bronchopulmonary
+infection located in lung lymph nodes,sore throat,mild fever,muscle aches,cough,chest discomfort,shortness of breath,tiredness, acute dyspnoea, stridor, fever, cyanosis, tachypnoea, cyanosis,tachycardia, moist rales
+skin lesion that eventually forms an ulcer with a black center,infection located in skin
+lesions,vomiting of blood,severe diarrhea,loss of appetite,infection located in mucosa of oropharynx
+drooping eyelids, difficulty swallowing, dry mouth, altered voice or difficulty speaking, paralysis
+enlarged tender lymph nodes,fever,chills,prostration
+fever,chills,cough,difficulty breathing
+lesions,severe infection,formation of lesions,generalized erythema and hemorrhages in the skin and mucosa
+fever,chills,malaise,muscle aches,vomiting,swollen lymph nodes,painful sores/leision,abdominal pain,intestinal ulcerations
+fever,chills,cough,difficulty breathing,infection located in lung,pneumonia, chest pain, bloody discharge, painful breathing
+fever,chills,myalgia,malaise,weight loss,bacteremia,fever,dry cough, pneumonia, pleuritis, hilar lymphadenopathy
+fever,headache,joint pain,muscle aches,sore throat,weakness,diarrhea,vomiting,stomach pain,rash,red eyes,hiccups,internal and external bleeding,hemorrhage
+fever,chills,headache,myalgia,maculopapular rash on the trunk,nausea,vomiting,chest pain,sore throat,abdominal pain,diarrhea,bleeding,skin rash,hemorrhage
+fever,retrosternal pain,sore throat,back pain,cough,abdominal pain,vomiting,diarrhea,conjunctivitis,facial swelling,proteinuria,mucosal bleeding,infection,rash,hemorrhage,seizure
+fever,headache,fatigue,myalgia,arthralgia,bleeding from the oral and nasal mucosa,bleeding from the bronchopulmonary,hemorrhage from nasal and oral,tremors,seizure

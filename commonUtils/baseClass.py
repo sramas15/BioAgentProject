@@ -149,15 +149,16 @@ class Ontology(object):
         1. name
         2. triggering findings: comma separated list, in the form [finding]=[strength]
         3. transmissions: comma separated list
-        4. incubation period: [int]
-        5. mortality: [float]"""
+        4. reproductive number
+        5. incubation period: [int]
+        6. mortality: [float]"""
         with open(filePath) as f:
             f.next() #skip header
             for line in f:
                 data = line.rstrip().split('\t')
                 assert len(data) == 5, "Malformed data entry; expected 5 columns, got %d, %s" %(len(data), data)
                 
-                [name, tFindingData, transmissions, incub, mortality] = data 
+                [name, tFindingData, transmissions, rNumber, incub, mortality, treatedMortality, stain, dose] = data 
                 
                 # Triggering Findings
                 tFindingStrengths = [finding.split('=') for finding in tFindingData.split(',')]
@@ -171,7 +172,7 @@ class Ontology(object):
                     print '\t\t', tFinding
                 
                 # Transimssionmethod
-                tMethods = [self.getTransmissionByName(transmission) for transmission in transmissions.split(',')]
+                tMethods = [self.getTransmissionByName(transmission.strip()) for transmission in transmissions.split(',')]
                 
                 print "\t and transmission methods:"
                 for t in tMethods:
@@ -179,8 +180,9 @@ class Ontology(object):
 
                 incub = int(incub)
                 mortality = float(mortality)
+                rNumber = float(rNumber)
 
-                agent = Agent(name, incub, mortality, tFindings, tMethods)
+                agent = Agent(name, rNumber, incub, mortality, tFindings, tMethods)
                 self.__agents.append(agent)
 
         print "INFO: parsed %d agents" %(len(self.__agents))
@@ -284,10 +286,11 @@ class Patient(object):
 
 class Agent(object):
     """Agent encodes information for a disease agent"""
-    def __init__(self, name, incubationPeriod, mortality, findings, transmissions):
+    def __init__(self, name, rNumber, incubationPeriod, mortality, findings, transmissions):
         super(Agent, self).__init__()
         self.name = name
         self.incubationPeriod = incubationPeriod
+        self.rNumber = rNumber
         self.mortality = mortality 
         self.transmissions = transmissions
         self.tFindings = findings # List of TriggeringFindings
