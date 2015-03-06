@@ -48,6 +48,7 @@ with open(INPUT_FILE, "r") as f:
 			findingStr = ""
 			for finding in findingWeights:
 				findingStr += "%s=%f," % (finding, findingWeights[finding])
+			findingStr = findingStr.rstrip(",")
 
 			# Write out the formatted agent string
 			o.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s" % (disease, findingStr, transmission, rNum, iNum, mNumU, mNumT, stain, dose))

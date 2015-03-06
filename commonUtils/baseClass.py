@@ -156,13 +156,14 @@ class Ontology(object):
             f.next() #skip header
             for line in f:
                 data = line.rstrip().split('\t')
-                assert len(data) == 5, "Malformed data entry; expected 5 columns, got %d, %s" %(len(data), data)
+                assert len(data) == 9, "Malformed data entry; expected 5 columns, got %d, %s" %(len(data), data)
                 
                 [name, tFindingData, transmissions, rNumber, incub, mortality, treatedMortality, stain, dose] = data 
                 
                 # Triggering Findings
                 tFindingStrengths = [finding.split('=') for finding in tFindingData.split(',')]
                 
+                print tFindingStrengths
 
                 tFindings = [TriggeringFinding(self.getFindingByName(finding), float(strength)) 
                              for [finding, strength] in tFindingStrengths]

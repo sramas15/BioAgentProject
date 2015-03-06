@@ -3,8 +3,8 @@ with open('disease_symptoms.txt') as f:
 		findings = set()
 		for line in f:
 			data = line.rstrip().split(',')
-			for symptom in data[1:]:
-				findings.add(symptom)
+			for symptom in data:
+				findings.add(symptom.strip())
 
 		for finding in findings:
 			outF.write(finding)

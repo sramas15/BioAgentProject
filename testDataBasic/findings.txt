@@ -1,55 +1,79 @@
-dysphagia
-infection located_in lung lymph nodes
-hiccups
-diarrhea
-loss of appetite
-weight loss
+joint pain
+headache
 skin lesion that eventually forms an ulcer with a black center
-tiredness
-blurred vision
 facial swelling
-severe diarrhea
-red eyes
-dysphonia
-mild fever
-rash
+pleuritis
 bleeding from the bronchopulmonary
+hiccups
+abdominal pain
+infection located in lung lymph nodes
+loss of appetite
+swollen lymph nodes
+intestinal ulcerations
+proteinuria
+tiredness
+stomach pain
+bleeding
+prostration
+hemorrhage
+generalized erythema and hemorrhages in the skin and mucosa
+infection located in lung
+bloody discharge
+malaise
+hilar lymphadenopathy
+dry mouth
+difficulty breathing
+infection located in skin
+weight loss
+red eyes
+diarrhea
+drooping eyelids
+rash
 bacteremia
 lesions
 maculopapular rash on the trunk
-difficulty breathing
-abdominal pain
-bleeding
-mucosal bleeding
-headache
-muscle aches
+dry cough
+sore throat
 retrosternal pain
-fever
-infection located_in skin
-weakness
+hemorrhage from nasal and oral
+tachycardia
+nausea
+mucosal bleeding
 back pain
-infection
+severe diarrhea
+muscle aches
+stridor
+fever
+painful breathing
+tremors
+weakness
+enlarged tender lymph nodes
 vomiting
-malaise
+severe infection
+seizure
+cyanosis
 fatigue
 chest discomfort
-joint pain
-stomach pain
-vomiting of blood
+moist rales
+acute dyspnoea
 cough
+infection located in mucosa of oropharynx
 internal and external bleeding
-sore throat
-nausea
-infection located_in mucosa of oropharynx
-proteinuria (protein in the urine)
-dysarthria
-diplopia
-shortness of breath
-arthralgia
-severe infection
-myalgia
-descending muscle paralysis
-conjunctivitis
-infection located_in lung
+tachypnoea
+difficulty swallowing
 chest pain
+bleeding from the oral and nasal mucosa
+skin rash
+shortness of breath
+painful sores/leision
+arthralgia
+paralysis
+myalgia
+conjunctivitis
+pneumonia
+mild fever
+vomiting of blood
+infection
+altered voice or difficulty speaking
+formation of lesions
 chills
