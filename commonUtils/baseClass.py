@@ -253,7 +253,9 @@ class Patient(object):
 
     def __getDiseaseScoresForContacts(self):
         scoreByDisease = {}
-        for contactId in contacts:
+        if len(self.contacts) == 0:
+            return {}
+        for contactId in self.contacts:
             contact = self.ontology.getPatientByID(contactId)
             if contact is None:
                 continue
@@ -310,10 +312,11 @@ class Patient(object):
                     f_k = pow(diagnosis.agent.rNumber, c_k)
                     d_k = diagnosis.agent.mortality * f_k
                     numerator += diagnosis.score * diagnosis.agent.getTransmissionWeight(tMethod) \
-                        * pMethod.getEffectiveNessForTMethod(tMethod) * d_k
+                        * pMethod.getEffectivenessForTMethod(tMethod) * d_k
             denominator = social_weight * pMethod.sCost + econ_weight * pMethod.eCost
             score = numerator/denominator
             if score > threshold:
+                print pMethod.name, score
                 self.pMethods.add(pMethod)
 
 
@@ -332,9 +335,6 @@ class Agent(object):
         self.transmissions = transmissions
         self.tFindings = findings # List of TriggeringFindings
 
-    def __hash__(self):
-        return hash(frozenset(self.__dict__.iteritems()))
-
     def __eq__(self, other):
         return (isinstance(other, self.__class__) and self.__dict__ == other.__dict__)
 
@@ -352,7 +352,7 @@ class Agent(object):
     def getTransmissionWeight(self, tMethod):
         """Get the weight of a transmission method for a given agent. To simplify, this is just 1/number of
         transmission methods (given that tMethod is one of the transmission methods for the disease)"""
-        assert len(self.transmissions) > 0 % "Agent %s must have at least one transmission method" % self.name
+        assert len(self.transmissions) > 0,  "Agent %s must have at least one transmission method" % self.name
         if tMethod in self.transmissions:
             return 1.0/len(self.transmissions)
         return 0
@@ -369,16 +369,13 @@ class PMethod(object):
         self.sCost = sCost # social cost (int in [0, 100])
         self.eCost = eCost # economic cost (int in [0, 100])
 
-    def __hash__(self):
-        return hash(frozenset(self.__dict__.iteritems()))
-
     def __eq__(self, other):
         return (isinstance(other, self.__class__) and self.__dict__ == other.__dict__)
 
     def addEffectivenessForTransmission(self, transmission, effectiveness):
         self.effectiveness[transmission] = effectiveness
 
-    def getEffectiveNessForTMethod(self, tMethod):
+    def getEffectivenessForTMethod(self, tMethod):
         assert tMethod in self.effectiveness, "No effectiveness for tMethod %s" % tMethod.definition
         return self.effectiveness[tMethod]
 

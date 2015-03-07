@@ -1,6 +1,5 @@
 Animal to Human Transmission
 Blood Borne Transmission
-Lactation Transmission
 Fecal Oral Transmission
 Airborne Transmission
 Fomite Transmission

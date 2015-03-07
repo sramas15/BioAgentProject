@@ -15,5 +15,23 @@ using test data found in folder testDataBasic"""
 using full agent data found in folder data"""
 o = Ontology('test full ontology')
 o.initialize(transmissionFile, findingFile, pMethodFile, agentFullFile)
-
 print o
+
+"""Basic test for diagnosis, using Machupo hemorrhagic fever"""
+p = Patient(o, 0, "X", 1)
+o.addPatient(p)
+symptoms = ["fever","headache","fatigue","myalgia","arthralgia", \
+	"bleeding from the oral and nasal mucosa","bleeding from the bronchopulmonary", \
+	"hemorrhage from nasal and oral","tremors","seizure"]
+for symptom in symptoms:
+	p.addFinding(symptom)
+p.determineDiagnosis()
+s = 0.0
+for diagnosis in  p.pDiagnosis:
+	s += diagnosis.score
+	print diagnosis
+
+p.determinePreventionMethods(0.0)
+
+for pMethod in p.pMethods:
+	print pMethod
