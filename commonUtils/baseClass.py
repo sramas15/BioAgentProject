@@ -298,14 +298,15 @@ class Patient(object):
             numerator = 0.0
             for diagnosis in diagnoses:
                 for tMethod in tMethods:
+                    c_k = min(30.0/diagnosis.agent.incubationPeriod, 7.0)
+                    f_k = pow(diagnosis.agent.rNumber, c_k)
+                    d_k = diagnosis.agent.mortality * f_k
                     numerator += diagnosis.score * diagnosis.agent.getTransmissionWeight(tMethod) \
-                        * pMethod.getEffectiveNessForTMethod(tMethod) * diagnosis.agent.mortality
+                        * pMethod.getEffectiveNessForTMethod(tMethod) * d_k
             denominator = social_weight * pMethod.sCost + econ_weight * pMethod.eCost
             score = numerator/denominator
             if score > threshold:
                 self.pMethods.add(pMethod)
-
-
 
 
     def __str__(self):
