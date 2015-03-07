@@ -328,8 +328,8 @@ class Patient(object):
             numerator = 0.0
             for diagnosis in diagnoses:
                 for tMethod in tMethods:
-                    c_k = min(30.0/diagnosis.agent.incubationPeriod, 7.0)
-                    f_k = pow(diagnosis.agent.rNumber, c_k)
+                    c_k = int(min(math.ceil(30.0/diagnosis.agent.incubationPeriod), 7.0))
+                    f_k = sum(pow(diagnosis.agent.rNumber, a) for a in range(1, c_k+1))
                     d_k = diagnosis.agent.mortality * f_k
                     numerator += diagnosis.score * diagnosis.agent.getTransmissionWeight(tMethod) \
                         * pMethod.getEffectivenessForTMethod(tMethod) * d_k
