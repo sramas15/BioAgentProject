@@ -210,10 +210,16 @@ class Patient(object):
         self.ontology = ontology
         self.dateSeen = dateSeen
         self.findings = set() # A set
-        self.pDiagnosis = set() # A set of probable diagnoses
-        self.cDiagnosis = set() # A set of confirmed diagnoses
+        self.pDiagnosis = set() # A set of probable diagnoses (Diagnosis objects)
+        self.cDiagnosis = set() # A set of confirmed diagnoses (Diagnosis objects)
         self.pMethods = set() # A set of received prevention methods
         self.contacts = set() # Contacted
+
+    def __hash__(self):
+        return hash(frozenset(self.__dict__.iteritems()))
+
+    def __eq__(self, other):
+        return (isinstance(other, self.__class__) and self.__dict__ == other.__dict__)
 
     # Setter methods
     def addFinding(self, findingName):
@@ -221,15 +227,17 @@ class Patient(object):
         if finding:
             self.findings.add(finding)
 
-    def addPDiagnosis(self, agentName):
+    def addPDiagnosis(self, agentName, score):
         agent = self.ontology.getAgentByName(agentName)
         if agent:
-            self.pDiagnosis.add(agent)
+            diagnosis = Diagnosis(agent, score)
+            self.pDiagnosis.add(diagnosis)
 
-    def addCDiagnosis(self, agentName):
+    def addCDiagnosis(self, agentName, score):
         agent = self.ontology.getAgentByName(agentName)
         if agent:
-            self.cDiagnosis.add(agent)
+            diagnosis = Diagnosis(agent, score)
+            self.cDiagnosis.add(diagnosis)
 
     def addContacts(self, contacts):
         self.contacts = contacts
@@ -324,6 +332,12 @@ class Agent(object):
         self.transmissions = transmissions
         self.tFindings = findings # List of TriggeringFindings
 
+    def __hash__(self):
+        return hash(frozenset(self.__dict__.iteritems()))
+
+    def __eq__(self, other):
+        return (isinstance(other, self.__class__) and self.__dict__ == other.__dict__)
+
     def matchFindings(self, pFindings):
         """Given a set of findings for a patient, find the normalized score [0, 1]
         indicating how likely it is the patient is infected with this agent. """
@@ -355,6 +369,12 @@ class PMethod(object):
         self.sCost = sCost # social cost (int in [0, 100])
         self.eCost = eCost # economic cost (int in [0, 100])
 
+    def __hash__(self):
+        return hash(frozenset(self.__dict__.iteritems()))
+
+    def __eq__(self, other):
+        return (isinstance(other, self.__class__) and self.__dict__ == other.__dict__)
+
     def addEffectivenessForTransmission(self, transmission, effectiveness):
         self.effectiveness[transmission] = effectiveness
 
@@ -363,18 +383,30 @@ class PMethod(object):
         return self.effectiveness[tMethod]
 
 class DefinitionObject(object):
-        """docstring for DefinitionObject"""
-        def __init__(self, definition):
-            super(DefinitionObject, self).__init__()
-            self.definition = definition
+    """docstring for DefinitionObject"""
+    def __init__(self, definition):
+        super(DefinitionObject, self).__init__()
+        self.definition = definition
+
+    def __hash__(self):
+        return hash(frozenset(self.__dict__.iteritems()))
+
+    def __eq__(self, other):
+        return (isinstance(other, self.__class__) and self.__dict__ == other.__dict__)
         
-        def __str__(self):
-            return self.definition
+    def __str__(self):
+        return self.definition
 
 class TransmissionMethod(DefinitionObject):
     """TransmissionMethod encodes information for a disease transmission method."""
     def __init__(self, definition):
         super(TransmissionMethod, self).__init__(definition)
+
+    def __hash__(self):
+        return hash(frozenset(self.__dict__.iteritems()))
+
+    def __eq__(self, other):
+        return (isinstance(other, self.__class__) and self.__dict__ == other.__dict__)
 
     def __str__(self):
         return super(TransmissionMethod, self).__str__()
@@ -383,6 +415,12 @@ class Finding(DefinitionObject):
     """Finding encodes information for a clinical finding."""
     def __init__(self, definition):
         super(Finding, self).__init__(definition)
+
+    def __hash__(self):
+        return hash(frozenset(self.__dict__.iteritems()))
+
+    def __eq__(self, other):
+        return (isinstance(other, self.__class__) and self.__dict__ == other.__dict__)
 
     def __str__(self):
         return super(Finding, self).__str__()
@@ -394,6 +432,12 @@ class TriggeringFinding(object):
         self.finding = finding
         self.triggeringStrength = triggeringStrength
 
+    def __hash__(self):
+        return hash(frozenset(self.__dict__.iteritems()))
+
+    def __eq__(self, other):
+        return (isinstance(other, self.__class__) and self.__dict__ == other.__dict__)
+
     def __str__(self):
         return('%s: %.3f' %(self.finding.definition, self.triggeringStrength))
 
@@ -403,6 +447,12 @@ class Diagnosis(object):
         super(Diagnosis, self).__init__()
         self.agent = agent
         self.score = score
+
+    def __hash__(self):
+        return hash(frozenset(self.__dict__.iteritems()))
+
+    def __eq__(self, other):
+        return (isinstance(other, self.__class__) and self.__dict__ == other.__dict__)
 
     def __str__(self):
         return('%s: %.3f' %(self.agent.name, self.score))
