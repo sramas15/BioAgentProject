@@ -1,4 +1,5 @@
 import operator
+import math
 
 class Ontology(object):
     """Ontology is the overarching class containing information
@@ -77,6 +78,9 @@ class Ontology(object):
 
     def getPreventionMethodIterable(self):
         return self.__pMethods
+
+    def getPatientIteratble(self):
+        return self.patients
 
     def initialize(self, transmissionFile, findingFile, pMethodFile, agentFile):
         """Called to load all final classes in the ontology. Should be called
@@ -214,6 +218,7 @@ class Patient(object):
         self.cDiagnosis = set() # A set of confirmed diagnoses (Diagnosis objects)
         self.pMethods = set() # A set of received prevention methods
         self.contacts = set() # Contacted
+        self.pMethodToScore = {} # dict from PMethod object to float score
 
     def __hash__(self):
         return hash(frozenset(self.__dict__.iteritems()))
@@ -295,6 +300,19 @@ class Patient(object):
         self.pDiagnosis = set(scores)
         return self.pDiagnosis
 
+    def __getLogSumPreventionMethodScore(self):
+        methodToScore = {}
+        patients = self.ontology.getPatientIteratble()
+        log_patients = max(math.log(float(len(patients))), math.e)
+        print "LOG PATIENTS %f" % log_patients
+        for patient in patients.values():
+            for pMethod in patient.pMethodToScore:
+                if pMethod not in methodToScore:
+                    methodToScore[pMethod] = 0.0
+                methodToScore[pMethod] += (patient.pMethodToScore[pMethod]/log_patients)
+        return methodToScore
+
+
     def determinePreventionMethods(self, threshold, social_weight=1.0/3, econ_weight=2.0/3):
         assert (len(self.pDiagnosis) > 0 or len(self.cDiagnosis) > 0), "Cannot determine a prevention method without a diagnosis"
         diagnoses = []
@@ -304,6 +322,8 @@ class Patient(object):
             diagnoses = self.pDiagnosis
         tMethods = self.ontology.getTransmissionMethodIterable()
         pMethods = self.ontology.getPreventionMethodIterable()
+        otherPatientLogSum = self.__getLogSumPreventionMethodScore()
+        methodToScore = {}
         for pMethod in pMethods:
             numerator = 0.0
             for diagnosis in diagnoses:
@@ -315,9 +335,18 @@ class Patient(object):
                         * pMethod.getEffectivenessForTMethod(tMethod) * d_k
             denominator = social_weight * pMethod.sCost + econ_weight * pMethod.eCost
             score = numerator/denominator
+            methodToScore[pMethod] = score
             if score > threshold:
-                print pMethod.name, score
+                #print pMethod.name, score
                 self.pMethods.add(pMethod)
+            elif pMethod in otherPatientLogSum:
+                score += otherPatientLogSum[pMethod]
+                methodToScore[pMethod] = score
+                if score > threshold:
+                    #print pMethod.name, score
+                    self.pMethods.add(pMethod)
+        self.pMethodToScore = methodToScore
+        return methodToScore
 
 
     def __str__(self):
@@ -378,6 +407,9 @@ class PMethod(object):
     def getEffectivenessForTMethod(self, tMethod):
         assert tMethod in self.effectiveness, "No effectiveness for tMethod %s" % tMethod.definition
         return self.effectiveness[tMethod]
+
+    def __str__(self):
+        return self.name
 
 class DefinitionObject(object):
     """docstring for DefinitionObject"""
