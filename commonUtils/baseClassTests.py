@@ -23,10 +23,10 @@ print o
 print "============== Test Diagnosis =============="
 p = Patient(o, 0, "X", 1)
 o.addPatient(p)
-#symptoms = ["fever","chills","cough","difficulty breathing"]
-symptoms = ["fever","headache","fatigue","myalgia","arthralgia", \
-	"bleeding from the oral and nasal mucosa","bleeding from the bronchopulmonary", \
-	"hemorrhage from nasal and oral","tremors","seizure"]
+symptoms = ["fever","chills","cough","difficulty breathing"]
+#symptoms = ["fever","headache","fatigue","myalgia","arthralgia", \
+#	"bleeding from the oral and nasal mucosa","bleeding from the bronchopulmonary", \
+#	"hemorrhage from nasal and oral","tremors","seizure"]
 for symptom in symptoms:
 	p.addFinding(symptom)
 p.determineDiagnosis()
@@ -36,7 +36,7 @@ for diagnosis in  p.pDiagnosis:
 	print diagnosis
 
 print "============== Test Prevention =============="
-methodToScore = p.determinePreventionMethods(400.0)
+methodToScore = p.determinePreventionMethods(7000.0)
 max_score = max(methodToScore.values())
 print "===== scores ======"
 for method in methodToScore:
@@ -57,7 +57,7 @@ for diagnosis in  p.pDiagnosis:
 	print diagnosis
 
 print "============== Test Prevention =============="
-methodToScore = p.determinePreventionMethods(300.0)
+methodToScore = p.determinePreventionMethods(7000.0)
 max_score = max(methodToScore.values())
 print "===== scores ======"
 for method in methodToScore:

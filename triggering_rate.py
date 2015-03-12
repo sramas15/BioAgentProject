@@ -1,7 +1,7 @@
 DEFINITIVE_FACTOR = 2
 INPUT_FILE = "data/AgentsDB.tsv"
 OUTPUT_FILE = "data/agents.txt"
-FORMAT_LINE = "Disease	Finding	Transmission Method (Comma separated list)	Reproductive Number	Incubation Period (days)	Mortality Rate UnTreated	Mortality Rate Treated	Gram Stain	Infectious Dose"
+FORMAT_LINE = "Disease	Finding	Transmission Method (Comma separated list)	Reproductive Number	Incubation Period (days)	Mortality Rate UnTreated	Mortality Rate Treated	Gram Stain	Infectious Dose\n"
 
 # Compute Trigger rates (not weighted)
 symptom_freq = {}

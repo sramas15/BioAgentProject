@@ -16,6 +16,9 @@ class Ontology(object):
         self.__transmissions = [] # List of Transmission instances
         self.__findings = [] # List of Finding instances
  
+    def clearPatients(self):
+        self.patients = {}
+
     def addPatient(self, newPatient):
         """Add a new patient of class Patient.
         Should call initialize to load constant classes
@@ -277,7 +280,7 @@ class Patient(object):
         max_score = max(scoreByDisease.iteritems(), key=operator.itemgetter(1))[1]
         for disease in scoreByDisease:
             scoreByDisease[disease] /= max_score
-            scoreByDisease[disease] /= 2
+            scoreByDisease[disease] *= 0.5
             # Scores between 1.0 to 1.5
             scoreByDisease[disease] += 1
         return scoreByDisease
@@ -303,13 +306,21 @@ class Patient(object):
     def __getLogSumPreventionMethodScore(self):
         methodToScore = {}
         patients = self.ontology.getPatientIteratble()
-        log_patients = max(math.log(float(len(patients))), math.e)
-        print "LOG PATIENTS %f" % log_patients
+        num_patients = 1.0
+        #log_patients = max(math.log(float(len(patients))), math.e)
+        #print "LOG PATIENTS %f" % log_patients
         for patient in patients.values():
+            if patient.ID >= self.ID:
+                continue
+            num_patients += 1
             for pMethod in patient.pMethodToScore:
                 if pMethod not in methodToScore:
                     methodToScore[pMethod] = 0.0
-                methodToScore[pMethod] += (patient.pMethodToScore[pMethod]/log_patients)
+                methodToScore[pMethod] += patient.pMethodToScore[pMethod]
+        log_patients = max(math.log(num_patients), 1)
+        print "LOG PATIENTS %f" % log_patients
+        for method in methodToScore:
+            methodToScore[method] /= log_patients
         return methodToScore
 
 
